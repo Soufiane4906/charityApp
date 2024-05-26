@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: boots_trap">
+    <title>User Profile</title>
+</head>
+<body>
+<div class="container col-md-offset-3 col-md-8 mt-lg-5 mb-md-5">
+    <div th:replace="fragments :: nav_bar"></div>
+    <h2>User Profile</h2>
+    <table class="table table-bordered table-hover">
+        <tr>
+            <th>First Name</th>
+            <td th:text="${user.firstName}"></td>
+        </tr>
+        <tr>
+            <th>Last Name</th>
+            <td th:text="${user.lastName}"></td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td th:text="${user.email}"></td>
+        </tr>
+        <!-- Add other fields as needed -->
+    </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: boots_trap">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="webjars/bootstrap/5.3.3/css/bootstrap.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>Charity Actions</title>
+</head>
+<div class="modal fade" id="createDonationModal" tabindex="-1" aria-labelledby="createDonationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createDonationModalLabel">Create Donation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form th:action="@{/donations/add}" method="post">
+                <div class="form-group">
+                    <label for="user">User</label>
+                    <select name="userId" id="user" class="form-control" required>
+                        <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.getEmail()}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="charityAction">Charity Action</label>
+                    <select name="charityActionId" id="charityAction" class="form-control" required>
+                        <option th:each="action : ${charityActions}" th:value="${action.id}" th:text="${action.getLocation()}"></option>
+                    </select>
+                </div>
+
+
+
+                    <div class="form-group">
+                        <label for="amount">Amount</label>
+                        <input type="number" step="0.01" name="amount" id="amount" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="date" name="date" id="date" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<body>
+
+
+
+
+
+
+
+
+
+
+<div class="container col-md-offset-3 col-md-8 mt-lg-5 mb-md-5">
+    <div th:replace="fragments::nav_bar"></div>
+
+
+    <h2>Donations</h2>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createDonationModal">
+        Create Donation
+    </button>
+
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Charity Action </th>
+            <th>User </th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="donation : ${donations}">
+            <td th:text="${donation.amount}"></td>
+            <td th:text="${#dates.format(donation.date, 'yyyy-MM-dd')}"></td>
+            <td th:text="${donation.getCharityActionName()}"></td>
+            <td th:text="${donation.getUserName()}"></td>
+            <td>
+                <a th:href="@{/donations/edit/{id}(id=${donation.id})}" class="btn btn-primary btn-sm">Edit</a>
+                <a   id="deleteId" onclick="confirmDelete(event)"    th:value="${donation.id}" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<script th:inline="javascript">
+    function confirmDelete(event) {
+        event.preventDefault(); // Prevent the default action of the link
+        const productId = document.getElementById('deleteId').getAttribute('value');
+        Swal.fire({
+            title: "AreYouSure",
+            text: "AboutToDelete",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: "Yes Delete",
+            cancelButtonText: "Cancel"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirect to the delete URL if confirmed
+                window.location.href = '/donations/delete?id=' + productId;
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

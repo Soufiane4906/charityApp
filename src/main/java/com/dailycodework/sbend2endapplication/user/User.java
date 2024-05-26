@@ -1,5 +1,6 @@
 package com.dailycodework.sbend2endapplication.user;
 
+import com.dailycodework.sbend2endapplication.entities.Donation;
 import com.dailycodework.sbend2endapplication.registration.token.VerificationToken;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -8,11 +9,10 @@ import lombok.Setter;
 import org.hibernate.annotations.NaturalId;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
-/**
- * @author Sampson Alfred
- */
+
 @Entity
 @Getter
 @Setter
@@ -32,6 +32,10 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
+    @OneToMany(mappedBy = "user")
+
+    private List<Donation> donations;
+
 
     public User(String firstName, String lastName, String email,
                 String password, Collection<Role> roles) {

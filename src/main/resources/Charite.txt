@@ -1,0 +1,233 @@
+Pour implémenter l'Application de Gestion des Actions de Charité en utilisant Spring Boot, nous devons définir des classes qui correspondent aux entités du diagramme de classe UML, ainsi que des classes pour les services, les contrôleurs et les référentiels (repositories). Voici un exemple de ce que ces classes pourraient ressembler en code Java:
+
+### Entités
+
+#### Utilisateur.java
+```java
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
+public class Utilisateur {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long userID;
+    
+    private String nom;
+    private String email;
+    private String motDePasse;
+
+    @OneToMany(mappedBy = "utilisateur")
+    private List<Don> historiqueDons;
+
+    // Getters and Setters
+}
+```
+
+#### ActionCaritative.java
+```java
+import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
+
+@Entity
+public class ActionCaritative {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long actionID;
+
+    private String titre;
+    private String description;
+    private Date date;
+    private String lieu;
+    private float objectifCollecte;
+    private float sommeCollectée;
+
+    @OneToMany(mappedBy = "actionCaritative")
+    private List<Media> medias;
+
+    // Getters and Setters
+}
+```
+
+#### Media.java
+```java
+import javax.persistence.*;
+
+@Entity
+public class Media {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long mediaID;
+
+    private String type;
+    private String url;
+
+    @ManyToOne
+    @JoinColumn(name = "action_id")
+    private ActionCaritative actionCaritative;
+
+    // Getters and Setters
+}
+```
+
+#### Don.java
+```java
+import javax.persistence.*;
+import java.util.Date;
+
+@Entity
+public class Don {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long donID;
+
+    private float montant;
+    private Date date;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private Utilisateur utilisateur;
+
+    @ManyToOne
+    @JoinColumn(name = "action_id")
+    private ActionCaritative actionCaritative;
+
+    // Getters and Setters
+}
+```
+
+#### Administrateur.java
+```java
+import javax.persistence.*;
+
+@Entity
+public class Administrateur {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long adminID;
+
+    private String nom;
+    private String email;
+
+    // Getters and Setters
+}
+```
+
+### Référentiels
+
+#### UtilisateurRepository.java
+```java
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long> {
+}
+```
+
+#### ActionCaritativeRepository.java
+```java
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ActionCaritativeRepository extends JpaRepository<ActionCaritative, Long> {
+}
+```
+
+#### MediaRepository.java
+```java
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface MediaRepository extends JpaRepository<Media, Long> {
+}
+```
+
+#### DonRepository.java
+```java
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface DonRepository extends JpaRepository<Don, Long> {
+}
+```
+
+#### AdministrateurRepository.java
+```java
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface AdministrateurRepository extends JpaRepository<Administrateur, Long> {
+}
+```
+
+### Services
+
+#### UtilisateurService.java
+```java
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+
+@Service
+public class UtilisateurService {
+    @Autowired
+    private UtilisateurRepository utilisateurRepository;
+
+    public Utilisateur sInscrire(Utilisateur utilisateur) {
+        return utilisateurRepository.save(utilisateur);
+    }
+
+    public Utilisateur seConnecter(String email, String motDePasse) {
+        return utilisateurRepository.findByEmailAndMotDePasse(email, motDePasse);
+    }
+
+    public Utilisateur modifierProfil(Long id, Utilisateur updatedUtilisateur) {
+        return utilisateurRepository.findById(id)
+            .map(utilisateur -> {
+                utilisateur.setNom(updatedUtilisateur.getNom());
+                utilisateur.setEmail(updatedUtilisateur.getEmail());
+                utilisateur.setMotDePasse(updatedUtilisateur.getMotDePasse());
+                return utilisateurRepository.save(utilisateur);
+            }).orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+    }
+
+    public List<Don> consulterHistorique(Long userId) {
+        return utilisateurRepository.findById(userId).get().getHistoriqueDons();
+    }
+}
+```
+
+### Contrôleurs
+
+#### UtilisateurController.java
+```java
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/utilisateurs")
+public class UtilisateurController {
+    @Autowired
+    private UtilisateurService utilisateurService;
+
+    @PostMapping("/inscription")
+    public Utilisateur inscrire(@RequestBody Utilisateur utilisateur) {
+        return utilisateurService.sInscrire(utilisateur);
+    }
+
+    @PostMapping("/connexion")
+    public Utilisateur connexion(@RequestParam String email, @RequestParam String motDePasse) {
+        return utilisateurService.seConnecter(email, motDePasse);
+    }
+
+    @PutMapping("/{id}")
+    public Utilisateur modifierProfil(@PathVariable Long id, @RequestBody Utilisateur utilisateur) {
+        return utilisateurService.modifierProfil(id, utilisateur);
+    }
+
+    @GetMapping("/{id}/historique")
+    public List<Don> consulterHistorique(@PathVariable Long id) {
+        return utilisateurService.consulterHistorique(id);
+    }
+}
+```
+
+Cet exemple fournit les bases de la mise en place des entités, référentiels, services et contrôleurs pour l'application de gestion des actions de charité. Vous pouvez étendre cette structure en ajoutant des validations, des exceptions, des configurations de sécurité, des tests unitaires, etc., en fonction des besoins spécifiques de votre application.

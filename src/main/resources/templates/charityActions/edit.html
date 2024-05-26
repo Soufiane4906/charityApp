@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Charity Action</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container col-md-offset-3 col-md-8 mt-lg-5 mb-md-5">
+    <div th:replace="fragments::nav_bar"></div>
+
+    <h1>Edit Charity Action</h1>
+    <form th:action="@{/charityActions/edit/{id}(id=${charityAction.id})}" th:object="${charityAction}" method="post">
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" class="form-control" id="title" th:field="*{title}" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea class="form-control" id="description" th:field="*{description}" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="date">Date</label>
+            <input type="date" class="form-control" id="date" th:field="*{date}" required>
+        </div>
+        <div class="form-group">
+            <label for="location">Location</label>
+            <input type="text" class="form-control" id="location" th:field="*{location}" required>
+        </div>
+        <div class="form-group">
+            <label for="fundraisingGoal">Fundraising Goal</label>
+            <input type="number" step="0.01" class="form-control" id="fundraisingGoal" th:field="*{fundraisingGoal}" required>
+        </div>
+        <div class="form-group">
+            <label for="amountRaised">Amount Raised</label>
+            <input type="number" step="0.01" class="form-control" id="amountRaised" th:field="*{amountRaised}">
+        </div>
+        <button type="submit" class="btn btn-primary">Save changes</button>
+    </form>
+</div>
+
+</body>
+</html>

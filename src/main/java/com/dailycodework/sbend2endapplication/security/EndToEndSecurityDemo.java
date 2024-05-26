@@ -41,7 +41,18 @@ public class EndToEndSecurityDemo {
                         "/",
                         "/login",
                         "/error",
-                        "/registration/**")
+                        "/registration/**",
+                        "/charityActions/**",
+                        "/charityActions/",
+                        "/donations/**",
+                        "/users/**",
+
+                        "/charityActions/edit**",
+                        "/charityActions/delete**"
+                        )// Add this line
+
+                // Add this line
+
                 .permitAll()
                 .anyRequest()
                 .authenticated()
