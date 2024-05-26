@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.hibernate.annotations.NaturalId;
 
 import java.util.Collection;
@@ -38,9 +37,7 @@ public class User {
     @OneToMany(mappedBy = "user")
 
     private List<Donation> donations;
-
-
-
+    private String imageUrl;
 
 
     public User(String firstName, String lastName, String email,
