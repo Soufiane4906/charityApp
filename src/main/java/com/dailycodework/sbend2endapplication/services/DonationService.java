@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.security.Principal;
 import java.util.Date;
@@ -63,9 +64,31 @@ public class DonationService {
         existingDonation.setDate(donation.getDate());
         existingDonation.setUser(donation.getUser());
         existingDonation.setUser(donation.getUser());
+        existingDonation.setCharityAction(donation.getCharityAction());
+
         // Update other fields as needed
 
         // Save and return the updated donation
        return donationRepository.save(existingDonation);
     }
+
+
+
+
+    public void updateDonation(Long id, Donation donation, Long userId, Long charityActionId) {
+        Optional<Donation> existingDonation = donationRepository.findById(id);
+        if (existingDonation.isPresent()) {
+            Donation d = existingDonation.get();
+            d.setAmount(donation.getAmount());
+            d.setDate(donation.getDate());
+            User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+            d.setUser(user);
+            CharityAction charityAction = charityActionRepository.findById(charityActionId).orElseThrow(() -> new RuntimeException("Charity Action not found"));
+d.setCharityAction(charityAction);
+
+            // Set the user and charity action here as needed
+            donationRepository.save(d);
+        }
+    }
+
 }

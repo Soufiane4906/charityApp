@@ -36,7 +36,7 @@ public class Donation {
 
     public String getUserName() {
        if (user == null) return "";
-        return user.getFirstName() + " " + user.getLastName();
+        return user.getEmail()  + " :  " + user.getLastName() + " " + user.getFirstName() + this.getId();
     }
     // getters and setters
 }

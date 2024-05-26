@@ -48,12 +48,15 @@ public class EndToEndSecurityDemo {
                         "/users/**",
 
                         "/charityActions/edit**",
-                        "/charityActions/delete**"
+                        "/charityActions/delete**",
+                        "/profiles/*",
+                        "/images/*"
                         )// Add this line
 
                 // Add this line
 
                 .permitAll()
+
                 .anyRequest()
                 .authenticated()
                 .and()

@@ -50,7 +50,7 @@ public class CharityActionController {
         return "redirect:/charityActions";
     }
 
-    @GetMapping("/delete")
+    @PostMapping("/delete")
     public String deleteCharityAction(@RequestParam Long id, RedirectAttributes ra){
         try{
             charityActionService.deleteCharityAction(id);

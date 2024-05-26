@@ -68,15 +68,19 @@ public class DonationController {
     @GetMapping("/edit/{id}")
     public String updateCharityActionForm(@PathVariable Long id, Model model) {
         Optional<Donation> donation = donationService.getDonationById(id);
-        model.addAttribute("donation", donation.get());
-        model.addAttribute("users", userService.getAllUsers());
-        model.addAttribute("charityActions", charityActionService.getAllCharityActions());
-        return "Donation/edit";
+        if (donation.isPresent()) {
+            model.addAttribute("donation", donation.get());
+            model.addAttribute("users", userService.getAllUsers());
+            model.addAttribute("charityActions", charityActionService.getAllCharityActions());
+            return "Donation/edit";
+        } else {
+            return "redirect:/donations";
+        }
     }
 
     @PostMapping("/edit/{id}")
-    public String updateCharityAction(@PathVariable Long id, @ModelAttribute Donation donation) {
-        donationService.updateDonation(id, donation);
+    public String updateCharityAction(@PathVariable Long id, @RequestParam Long userId, @RequestParam Long charityActionId, @ModelAttribute Donation donation) {
+        donationService.updateDonation(id, donation, userId, charityActionId);
         return "redirect:/donations";
     }
 

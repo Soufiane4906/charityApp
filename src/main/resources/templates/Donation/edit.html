@@ -8,18 +8,28 @@
 <body>
 <div class="container">
     <h2>Edit Donation</h2>
+
+
     <form th:action="@{/donations/edit/{id}(id=${donation.id})}" method="post">
+        <input type="hidden" name="id" th:value="${donation.id}">
         <div class="form-group">
             <label for="user">User</label>
+
+
             <select name="userId" id="user" class="form-control" required>
-                <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.email}"
+                <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.getEmail() }"
                         th:selected="${user.id == donation.user.id}"></option>
+
             </select>
         </div>
+
+
+
+
         <div class="form-group">
             <label for="charityAction">Charity Action</label>
             <select name="charityActionId" id="charityAction" class="form-control" required>
-                <option th:each="action : ${charityActions}" th:value="${action.id}" th:text="${action.location}"
+                <option th:each="action : ${charityActions}" th:value="${action.id}" th:text="${action. getTitle() + ' </br> ' + action.location}"
                         th:selected="${action.id == donation.charityAction.id}"></option>
             </select>
         </div>

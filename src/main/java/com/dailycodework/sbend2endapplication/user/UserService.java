@@ -7,7 +7,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -17,10 +23,12 @@ import java.util.Optional;
  */
 @Service
 @RequiredArgsConstructor
+
 public class UserService implements IUserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final VerificationTokenService verificationTokenService;
+
 
     @Override
     public List<User> getAllUsers() {
@@ -59,4 +67,6 @@ public class UserService implements IUserService {
         theUser.ifPresent(user -> verificationTokenService.deleteUserToken(user.getId()));
         userRepository.deleteById(id);
     }
+
+
 }
