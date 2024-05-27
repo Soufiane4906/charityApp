@@ -1,14 +1,120 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments :: boots_trap">
-    <meta charset="UTF-8">
-    <title>The Demo App</title>
-</head>
 
+    <title>Charity Actions</title>
+</head>
 <body>
-<div class="container offset-sm-2 col-md-8 mt-lg-5">
-    <div th:replace="fragments :: nav_bar"></div>
-    <h2 class="m-lg-5">Welcome to our end to end web application  </h2>
+
+<div class="container mt-lg-5 mb-md-5">
+    <div th:replace="fragments::nav_bar"></div>
+
+    <h2 class="m-4">
+        Charity Actions
+    </h2>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <div th:each="charityAction : ${charityActions}" class="col">
+            <div class="card">
+                <img src="..." class="card-img-top" alt="Charity Action Image">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${charityAction.title}"></h5>
+                    <p class="card-text" th:text="${charityAction.description}"></p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Date: <span th:text="${charityAction.date}"></span></li>
+                        <li class="list-group-item">Location: <span th:text="${charityAction.location}"></span></li>
+                        <li class="list-group-item">Fundraising Goal: <span th:text="${charityAction.fundraisingGoal}"></span></li>
+                        <li class="list-group-item">Amount Raised: <span th:text="${charityAction.amountRaised}"></span></li>
+                    </ul>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#donationModal">Make a Donation</button>
+                        <button class="btn btn-secondary" type="button">View Donation History</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<!-- Donation Modal -->
+<div class="modal fade" id="donationModal" tabindex="-1" aria-labelledby="donationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="donationModalLabel">Make a Donation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label  class="form-label">Are you authenticated?</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="authType" id="authenticated" value="authenticated">
+                        <label class="form-check-label" for="authenticated">
+                            Yes, I'm authenticated
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="authType" id="notAuthenticated" value="notAuthenticated">
+                        <label class="form-check-label" for="notAuthenticated">
+                            No, I'm not authenticated
+                        </label>
+                    </div>
+                </div>
+                <div id="donationForm">
+                    <!-- Donation Form for authenticated user -->
+                    <form id="authDonationForm">
+                        <div class="mb-3">
+                            <label for="amount" class="form-label">Amount</label>
+                            <input type="number" class="form-control" id="amount" placeholder="Enter amount" required>
+                        </div>
+                        <!-- Add other fields if needed -->
+                        <button type="submit" class="btn btn-primary">Submit Donation</button>
+                    </form>
+
+                    <!-- Donation Form for non-authenticated user -->
+                    <form id="nonAuthDonationForm">
+                        <!-- Add fields for non-authenticated user if needed -->
+                        <div class="mb-3">
+                            <label for="amount" class="form-label">Amount</label>
+                            <input type="number" class="form-control"  placeholder="Enter amount" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" placeholder="Enter your name" required>
+                        </div>
+                        <!-- Add other fields if needed -->
+                        <button type="submit" class="btn btn-primary">Submit Donation</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Your JavaScript for handling form submission and radio button change event -->
+
+<script>
+    // Show/hide donation form based on radio button selection
+    document.addEventListener('DOMContentLoaded', function () {
+        const authDonationForm = document.getElementById('authDonationForm');
+        const nonAuthDonationForm = document.getElementById('nonAuthDonationForm');
+        const authRadio = document.getElementById('authenticated');
+        const notAuthRadio = document.getElementById('notAuthenticated');
+
+        authRadio.addEventListener('change', function () {
+            if (authRadio.checked) {
+                authDonationForm.style.display = 'block';
+                nonAuthDonationForm.style.display = 'none';
+            }
+        });
+
+        notAuthRadio.addEventListener('change', function () {
+            if (notAuthRadio.checked) {
+                nonAuthDonationForm.style.display = 'block';
+                authDonationForm.style.display = 'none';
+            }
+        });
+    });
+</script>
+
 </body>
 </html>
