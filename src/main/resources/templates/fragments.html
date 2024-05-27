@@ -43,10 +43,67 @@
         <li class="nav-item" sec:authorize="isAuthenticated()">
           <a class="nav-link" href="#" th:href="@{/users/profile}">Profile</a>
         </li>
+        <li class="nav-item">
+          <select name="languages" id="language-select" class="language-select" onchange="handleLanguageChange()">
+            <option value="" disabled selected hidden>Select Language</option>
+            <option class="en" value="en">English</option>
+            <option class="fr" value="fr">French</option>
+            <!-- Add options for other languages with appropriate classes -->
+          </select>
+        </li>
       </ul>
     </div>
   </div>
 </nav>
 </div>
 </body>
+<script>
+  function en_click() {
+    window.location.replace("?lang=en")
+
+  }
+  function fr_click() {
+    window.location.replace("?lang=fr")
+
+  }
+
+
+
+  function handleLanguageChange() {
+    const select = document.getElementById('language-select');
+    const value = select.value;
+
+    if (value === 'en') {
+      en_click();
+    } else if (value === 'fr') {
+      fr_click();
+    }
+    else if (value === 'ar') {
+      ar_click();
+    }
+  }
+
+</script>
+<style>
+  .language-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    /* give web url for flags   */
+    background-image: url('https://www.countryflags.io/us/flat/64.png');    background-repeat: no-repeat;
+    background-position: right center;
+    padding-right: 30px; /* Adjust according to the width of your arrow icon */
+  }
+  .language-select option.en {
+    background-image: url('https://www.countryflags.io/us/flat/64.png');    padding-left: 20px; /* Adjust according to the width of your image */
+    background-repeat: no-repeat;
+    background-position: center left;
+  }
+  .language-select option.fr {
+    background-image: url('https://www.countryflags.io/fr/flat/64.png');    padding-left: 20px; /* Adjust according to the width of your image */
+    background-repeat: no-repeat;
+    background-position: center left;
+  }
+  /* Add similar styles for other languages */
+</style>
 </html>

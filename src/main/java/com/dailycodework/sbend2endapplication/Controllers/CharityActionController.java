@@ -45,6 +45,21 @@ public class CharityActionController {
 
         return "charityActions/list";
     }
+    //    public List<CharityAction> getCharityActionsByLocation(String location) {
+    //        return charityActionRepository.findByLocationContainingIgnoreCase(location);
+    //    }
+// @GetMapping("/search")
+// public String searchCharityActions(@RequestParam String term, Model model) {
+//     List<CharityAction> searchResults = charityActionService.searchCharityActions(term);
+//     model.addAttribute("SearchResults", searchResults);
+//     model.addAttribute("title", "Search Results");
+//     model.addAttribute("occurence", searchResults.size());
+//     //
+//     model.addAttribute("title", term);
+
+//     return "search_results";
+// }
+
 
     @GetMapping("/{id}")
     public String getCharityActionById(@PathVariable Long id, Model model) {
@@ -60,8 +75,8 @@ public class CharityActionController {
 
     @GetMapping("/edit/{id}")
     public String updateCharityActionForm(@PathVariable Long id, Model model) {
-        Optional<CharityAction> charityAction =charityActionService.getCharityActionById(id);
-        model.addAttribute("charityAction",charityAction.get() );
+        CharityAction charityAction = charityActionService.getCharityActionById(id);
+        model.addAttribute("charityAction",charityAction);
         return "charityActions/edit";
     }
 
@@ -84,9 +99,14 @@ public class CharityActionController {
 
 
     @GetMapping("/search")
-    public String searchCharityActions(@RequestParam String keyword, Model model) {
-        List<CharityAction> searchResults = charityActionService.searchCharityActions(keyword);
-        model.addAttribute("charityActions", searchResults);
-        return "charityActions/search";
+    public String search(@RequestParam("term") String term, Model model) {
+        List<CharityAction> charity = charityActionService.findByNameContaining(term);
+        int occurence = charity.size();
+        model.addAttribute("charity", charity);
+        model.addAttribute("occurence", occurence);
+        return "charityActions/search_results";  // return the view that displays the search results
     }
+
+
+
 }

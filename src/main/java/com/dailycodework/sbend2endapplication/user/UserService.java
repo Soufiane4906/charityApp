@@ -90,4 +90,10 @@ public class UserService implements IUserService {
         user.setUserImage(fileName);
         userRepository.save(user);
     }
+
+
+    public User getUserById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException("User not found"));
+    }
 }

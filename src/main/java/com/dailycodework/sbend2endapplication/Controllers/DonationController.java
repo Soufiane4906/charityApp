@@ -4,6 +4,7 @@ import com.dailycodework.sbend2endapplication.entities.CharityAction;
 import com.dailycodework.sbend2endapplication.entities.Donation;
 import com.dailycodework.sbend2endapplication.services.CharityActionService;
 import com.dailycodework.sbend2endapplication.services.DonationService;
+import com.dailycodework.sbend2endapplication.user.User;
 import com.dailycodework.sbend2endapplication.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -59,28 +60,52 @@ public class DonationController {
         return "Donation/list";
     }
 
+
     @PostMapping("/add")
     public String createDonation(@RequestParam Long userId, @RequestParam Long charityActionId, @ModelAttribute Donation donation) {
         donationService.saveDonationWithUserAndAction(donation, userId, charityActionId);
         return "redirect:/donations";
     }
 
+    @PostMapping("/adddonation")
+    public String createDonation(@RequestParam Long userId,
+                                 @RequestParam Long charityActionId,
+                                 @RequestParam Double amount) {
+        // get the user connected to the donation
+        User user = userService.getUserById(userId);
+        Donation donation = new Donation();
+        CharityAction charityAction = charityActionService.getCharityActionById(charityActionId);
+        if (user == null || charityAction == null) {
+            // Gérer l'erreur si l'utilisateur ou l'action de charité n'existe pas
+            // Vous pouvez rediriger l'utilisateur vers une page d'erreur ou effectuer une autre action appropriée
+            return "redirect:/donations";
+        } else {
+            // Mettre à jour le montant collecté de l'action de charité
+            double newAmountRaised = charityAction.getAmountRaised() + amount;
+            charityAction.setAmountRaised(newAmountRaised);
+            // Enregistrer la donation
+            donationService.saveDonationWithUserAndAction(donation, userId, charityActionId);
+            // Mettre à jour l'action de charité dans la base de données
+            charityActionService.createCharityAction(charityAction);
+            return "redirect:/donations";
+        }
+
+
+    }
+
+
     @GetMapping("/edit/{id}")
     public String updateCharityActionForm(@PathVariable Long id, Model model) {
         Optional<Donation> donation = donationService.getDonationById(id);
-        if (donation.isPresent()) {
-            model.addAttribute("donation", donation.get());
-            model.addAttribute("users", userService.getAllUsers());
-            model.addAttribute("charityActions", charityActionService.getAllCharityActions());
-            return "Donation/edit";
-        } else {
-            return "redirect:/donations";
-        }
+        model.addAttribute("donation", donation.get());
+        model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("charityActions", charityActionService.getAllCharityActions());
+        return "Donation/edit";
     }
 
     @PostMapping("/edit/{id}")
-    public String updateCharityAction(@PathVariable Long id, @RequestParam Long userId, @RequestParam Long charityActionId, @ModelAttribute Donation donation) {
-        donationService.updateDonation(id, donation, userId, charityActionId);
+    public String updateCharityAction(@PathVariable Long id, @ModelAttribute Donation donation) {
+        donationService.updateDonation(id, donation);
         return "redirect:/donations";
     }
 

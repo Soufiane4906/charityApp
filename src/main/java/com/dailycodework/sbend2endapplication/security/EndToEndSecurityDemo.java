@@ -38,6 +38,8 @@ public class EndToEndSecurityDemo {
         return http.csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers(
+                        // Add this line /charityActions/search?term=Indianapolis for search
+                        "/charityActions/search**",
                         "/",
                         "/login",
                         "/error",

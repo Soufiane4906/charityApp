@@ -21,13 +21,15 @@ public class CharityActionService {
         return charityActionRepository
                 .findAll(PageRequest.of(page,10));
     }
-
+    public List<CharityAction> getCharityActionsByLocation(String location) {
+        return charityActionRepository.findByLocationContainingIgnoreCase(location);
+    }
     public List<CharityAction> getAllCharityActions() {
         return charityActionRepository.findAll();
     }
 
-    public Optional<CharityAction> getCharityActionById(Long id) {
-        return charityActionRepository.findById(id);
+    public CharityAction getCharityActionById(Long id) {
+        return charityActionRepository.findById(id).get();
     }
 
     public CharityAction createCharityAction(CharityAction charityAction) {
@@ -62,5 +64,9 @@ public class CharityActionService {
 
     public List<CharityAction> searchCharityActions(String keyword) {
         return charityActionRepository.findByTitleContainingIgnoreCase(keyword);
+    }
+
+    public List<CharityAction> findByNameContaining(String term) {
+        return charityActionRepository.findByLocationContainingIgnoreCase(term);
     }
 }

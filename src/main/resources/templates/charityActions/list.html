@@ -18,38 +18,26 @@
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createCharityActionModal">
         <i class="bi bi-plus-circle"></i> Create Charity Action
     </button>
-   <!-- <table class="table table-striped">
-        <thead>
-        <tr>
-            <th scope="col">Title</th>
-            <th scope="col">Description</th>
-            <th scope="col">Date</th>
-            <th scope="col">Location</th>
-            <th scope="col">Fundraising Goal</th>
-            <th scope="col">Amount Raised</th>
-            <th scope="col">Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="charityAction : ${charityActions}">
-            <td th:text="${charityAction.title}"></td>
-            <td th:text="${charityAction.description}"></td>
-            <td th:text="${charityAction.date}"></td>
-            <td th:text="${charityAction.location}"></td>
-            <td th:text="${charityAction.fundraisingGoal}"></td>
-            <td th:text="${charityAction.amountRaised}"></td>
-            <td>
-                <a th:href="@{/charityActions/edit/{id}(id=${charityAction.id})}" class="btn btn-primary">Edit</a>
-                <a   id="deleteId" onclick="confirmDelete(event)"    th:value="${charityAction.id}" class="btn btn-danger">
-                    <i class="bi bi-trash"></i>
-                </a>
 
-
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    -->
+        <div class="mx-3 my-5">
+            <div class="row">
+                <div class="col-6">
+                    <div class="alert alert-success" role="alert">
+                        <h1 th:text="${title}"></h1>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="alert alert-info" role="alert">
+                        <h2><span > Nombre total</span><span th:text="${count}"></span></h2>
+                    </div>
+                </div>
+            </div>
+            </hr>
+            <br>
+            <form th:action="@{/charityActions/search}" method="get">
+                <input type="text" name="term" class="form-control" placeholder="Search for product">
+                <button class="btn btn-outline-info" type="submit">Search</button>
+            </form>
     <table class="table table-striped">
         <thead>
         <tr>

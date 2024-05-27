@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CharityActionRepository extends JpaRepository<CharityAction, Long> {
     List<CharityAction> findByTitleContainingIgnoreCase(String keyword);
+
     //find by location containing
     List<CharityAction> findByLocationContainingIgnoreCase(String keyword);
-      //
 }
