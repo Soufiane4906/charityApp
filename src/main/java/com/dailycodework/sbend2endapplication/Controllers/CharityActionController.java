@@ -2,6 +2,7 @@ package com.dailycodework.sbend2endapplication.Controllers;
 
 import com.dailycodework.sbend2endapplication.entities.CharityAction;
 import com.dailycodework.sbend2endapplication.services.CharityActionService;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,9 +20,29 @@ public class CharityActionController {
         this.charityActionService = charityActionService;
     }
 
-    @GetMapping
+
     public String getAllCharityActions(Model model) {
         model.addAttribute("charityActions", charityActionService.getAllCharityActions());
+        return "charityActions/list";
+    }
+    @GetMapping
+    String getAllCharityActions(Model model,
+                       @RequestParam(defaultValue = "0") int page) {
+        Page<CharityAction> CharityList
+                = charityActionService.getProducts(page);
+        model.addAttribute("charityActions", CharityList);
+        model.addAttribute("title", "Liste des charity actions");
+        model.addAttribute("count", CharityList.getTotalElements());
+        model.addAttribute("currentPage", CharityList.getNumber());
+
+        int[] listPages = new int[CharityList.getTotalPages()];
+        for (int i = 0; i < listPages.length; i++) listPages[i] = i;
+
+        model.addAttribute("listPages", listPages);
+
+        // Add a new Product object to the model
+        model.addAttribute("charity", new CharityAction());
+
         return "charityActions/list";
     }
 

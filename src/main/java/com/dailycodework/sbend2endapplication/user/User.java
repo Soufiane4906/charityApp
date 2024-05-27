@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.NaturalId;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collection;
 import java.util.List;
@@ -37,7 +38,10 @@ public class User {
     @OneToMany(mappedBy = "user")
 
     private List<Donation> donations;
-    private String imageUrl;
+
+    private String  userImage;
+
+
 
 
     public User(String firstName, String lastName, String email,

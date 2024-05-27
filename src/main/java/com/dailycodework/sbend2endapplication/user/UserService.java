@@ -9,7 +9,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -41,8 +40,9 @@ public class UserService implements IUserService {
                 registration.getEmail(),
                 passwordEncoder.encode(registration.getPassword()),
                 Arrays.asList(new Role("ROLE_USER")));
-       return userRepository.save(user);
+        return userRepository.save(user);
     }
+
     @Override
     public Optional<User> findByEmail(String email) {
         return Optional.ofNullable(userRepository.findByEmail(email)
@@ -68,5 +68,26 @@ public class UserService implements IUserService {
         userRepository.deleteById(id);
     }
 
-
+    //upload image user
+    @Override
+    public void uploadUserImage(MultipartFile file, Long userId) {
+        if (file.isEmpty()) {
+            throw new IllegalStateException("Cannot upload empty file");
+        }
+        if (!Arrays.asList("image/jpeg", "image/png", "image/gif").contains(file.getContentType())) {
+            throw new IllegalStateException("File must be an image [jpeg, png, gif]");
+        }
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException("User not found"));
+        String fileName = userId + "_" + file.getOriginalFilename(); // Nom du fichier avec l'id de l'utilisateur
+        String folder = "src/main/resources/static/images/user/";
+        Path path = Paths.get(folder + fileName);
+        try {
+            Files.write(path, file.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        user.setUserImage(fileName);
+        userRepository.save(user);
+    }
 }

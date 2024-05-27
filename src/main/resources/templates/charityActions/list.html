@@ -16,8 +16,40 @@
         Charity Actions
     </h2>
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createCharityActionModal">
-        Create Charity Action
+        <i class="bi bi-plus-circle"></i> Create Charity Action
     </button>
+   <!-- <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Description</th>
+            <th scope="col">Date</th>
+            <th scope="col">Location</th>
+            <th scope="col">Fundraising Goal</th>
+            <th scope="col">Amount Raised</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="charityAction : ${charityActions}">
+            <td th:text="${charityAction.title}"></td>
+            <td th:text="${charityAction.description}"></td>
+            <td th:text="${charityAction.date}"></td>
+            <td th:text="${charityAction.location}"></td>
+            <td th:text="${charityAction.fundraisingGoal}"></td>
+            <td th:text="${charityAction.amountRaised}"></td>
+            <td>
+                <a th:href="@{/charityActions/edit/{id}(id=${charityAction.id})}" class="btn btn-primary">Edit</a>
+                <a   id="deleteId" onclick="confirmDelete(event)"    th:value="${charityAction.id}" class="btn btn-danger">
+                    <i class="bi bi-trash"></i>
+                </a>
+
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    -->
     <table class="table table-striped">
         <thead>
         <tr>
@@ -40,11 +72,21 @@
             <td th:text="${charityAction.amountRaised}"></td>
             <td>
                 <a th:href="@{/charityActions/edit/{id}(id=${charityAction.id})}" class="btn btn-primary">Edit</a>
-                <a   id="deleteId" onclick="confirmDelete(event)"    th:value="${charityAction.id}" class="btn btn-danger">Delete</a>
+                <a id="deleteId" onclick="confirmDelete(event)" th:value="${charityAction.id}" class="btn btn-danger">
+                    <i class="bi bi-trash"></i>
+                </a>
             </td>
         </tr>
         </tbody>
     </table>
+
+    <nav aria-label="pagination">
+        <ul class="pagination pagination-md">
+            <li style="margin-right: 4px;" th:each="p : ${listPages}" th:class="${currentPage == p ? 'page-item active' : 'page-item'}">
+                <a class="page-link" th:text="${p+1}" th:href="@{/charityActions(page=${p})}"></a>
+            </li>
+        </ul>
+    </nav>
 </div>
 
 

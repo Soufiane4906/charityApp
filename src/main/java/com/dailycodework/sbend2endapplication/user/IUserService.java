@@ -22,4 +22,6 @@ public interface IUserService {
     void deleteUser(Long id);
 
 
+    //upload image user
+    void uploadUserImage(MultipartFile file, Long userId);
 }

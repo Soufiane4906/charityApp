@@ -2,6 +2,8 @@ package com.dailycodework.sbend2endapplication.services;
 
 import com.dailycodework.sbend2endapplication.Repositories.CharityActionRepository;
 import com.dailycodework.sbend2endapplication.entities.CharityAction;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +15,11 @@ public class CharityActionService {
 
     public CharityActionService(CharityActionRepository charityActionRepository) {
         this.charityActionRepository = charityActionRepository;
+    }
+
+    public Page<CharityAction> getProducts(int page) {
+        return charityActionRepository
+                .findAll(PageRequest.of(page,10));
     }
 
     public List<CharityAction> getAllCharityActions() {
